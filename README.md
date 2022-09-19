@@ -2,7 +2,7 @@
 
 Database Design
 
-![image](https://user-images.githubusercontent.com/65022657/190992140-f0822c30-96fa-4a33-8c38-e2f2c100974f.png)
+![image](https://user-images.githubusercontent.com/65022657/191000109-8e9e2010-9419-41a8-928f-0f738040a337.png)
 
 User_reactions table:
 
