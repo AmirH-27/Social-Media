@@ -14,9 +14,17 @@ public class Reaction {
     @Id
     @GeneratedValue
     private int id;
-    private ReactionType reactionType;
     @ManyToOne
     private User user;
     @ManyToOne
     private Post post;
+
+    @Enumerated(EnumType.STRING)
+    private ReactionType reactionType;
+
+    public Reaction(User user, Post post, ReactionType reactionType) {
+        this.user = user;
+        this.post = post;
+        this.reactionType = reactionType;
+    }
 }
