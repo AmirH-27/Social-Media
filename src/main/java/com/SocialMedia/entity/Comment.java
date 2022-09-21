@@ -20,4 +20,10 @@ public class Comment {
     @ManyToOne
     private Post post;
     private String comment;
+
+    public Comment(String comment, User user, Post post) {
+        this.comment = comment;
+        this.user = user;
+        this.post = post;
+    }
 }
