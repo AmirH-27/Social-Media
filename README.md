@@ -1,10 +1,10 @@
 # WSIT_Social_Media_Task
 
-##Database Design
+## Database Design
 
 ![image](https://user-images.githubusercontent.com/65022657/191000109-8e9e2010-9419-41a8-928f-0f738040a337.png)
 
-##User: 
+## User: 
     
     -> Create
     -> Read
@@ -12,7 +12,7 @@
     -> Delete
     -> Login
 
-##Post:
+## Post:
 
     -> Create
     -> Read
@@ -20,7 +20,7 @@
     -> Delete
     -> View All
 
-##Comment: 
+## Comment: 
     
     -> Create
     -> Read
@@ -28,7 +28,7 @@
     -> Delete
     -> View comments on a post
 
-##Reaction:
+## Reaction:
 
     -> Like
     -> Dislike
