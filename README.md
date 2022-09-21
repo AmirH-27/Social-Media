@@ -4,6 +4,19 @@
 
 ![image](https://user-images.githubusercontent.com/65022657/191000109-8e9e2010-9419-41a8-928f-0f738040a337.png)
 
+### Task:
+
+- [x] 1. Login and Registration
+- [x] 2. Post
+- [x] 3. Like, Dislike, Comment
+- [x] 4. 2x Like or Dislike removes reaction
+- [ ] 5. Front-End
+
+## To-Do:
+
+    -> Create Views and Templates
+    -> Create Forms
+
 ## User: 
     
     -> Create
@@ -35,8 +48,3 @@
     -> Deletes from db when user clicks on the reaction again
     -> Changes form like to dislike and vice versa
     -> View reactions on a post
-
-## To-Do:
-
-    -> Create Views and Templates
-    -> Create Forms
