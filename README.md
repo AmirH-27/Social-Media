@@ -12,11 +12,6 @@
 - [x] 4. 2x Like or Dislike removes reaction
 - [ ] 5. Front-End
 
-## To-Do:
-
-    -> Create Views and Templates
-    -> Create Forms
-
 ## User: 
     
     -> Create
