@@ -13,8 +13,8 @@ import java.util.List;
 @Entity
 public class User {
     @Id
-    @GeneratedValue
-    private int userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String fullName;
     private String email;
     private String password;
@@ -28,8 +28,4 @@ public class User {
         this.gender = gender;
         this.profilePicture = profilePicture;
     }
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private List<Post> posts;
 }

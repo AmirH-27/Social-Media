@@ -3,6 +3,7 @@ package com.SocialMedia.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.*;
 
@@ -10,13 +11,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Reaction {
+public class Comment {
     @Id
     @GeneratedValue
     private int id;
-    private ReactionType reactionType;
     @ManyToOne
     private User user;
     @ManyToOne
     private Post post;
+    private String comment;
 }

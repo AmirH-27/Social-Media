@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -17,9 +14,20 @@ import javax.persistence.Id;
 public class Post {
     @Id
     @GeneratedValue
-    private int postId;
+    private int id;
     private String caption;
     private String postFile;
     private String createdAt;
     private String updatedAt;
+
+    @ManyToOne
+    private User user;
+
+    public Post(String caption, String postFile, String createdAt, String updatedAt, User user) {
+        this.caption = caption;
+        this.postFile = postFile;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.user = user;
+    }
 }
