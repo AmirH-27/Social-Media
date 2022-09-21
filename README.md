@@ -35,3 +35,8 @@
     -> Deletes from db when user clicks on the reaction again
     -> Changes form like to dislike and vice versa
     -> View reactions on a post
+
+## To-Do:
+
+    -> Create Views and Templates
+    -> Create Forms
