@@ -6,9 +6,12 @@ import com.SocialMedia.repo.PostRepo;
 import com.SocialMedia.repo.ReactionRepo;
 import com.SocialMedia.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class CommentController {
@@ -37,6 +40,8 @@ public class CommentController {
         commentRepo.save(comment);
         return comment;
     }
-
-
+    @GetMapping("/post/comments")
+    public List<Comment> getPostComments(@RequestParam("postId") int postId) {
+        return commentRepo.findAllByPost(postRepo.findById(postId).get());
+    }
 }

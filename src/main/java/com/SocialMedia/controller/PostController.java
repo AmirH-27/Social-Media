@@ -51,8 +51,4 @@ public class PostController {
         postRepo.deleteById(postId);
         return "Post deleted";
     }
-    @GetMapping("/post/comments")
-    public List<Comment> getPostComments(@RequestParam("postId") int postId) {
-        return commentRepo.findAllByPost(postRepo.findById(postId).get());
-    }
 }
