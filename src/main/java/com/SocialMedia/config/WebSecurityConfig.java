@@ -19,7 +19,8 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.httpBasic()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/login", "/signup").permitAll()
                 .anyRequest().authenticated()

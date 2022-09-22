@@ -41,6 +41,7 @@ public class PostController {
                            @RequestParam("userId") int userId, @RequestParam("postId") int postId) {
         Post post = postRepo.findById(postId).get();
         User user = userRepo.findById(userId).get();
+        postRepo.delete(post);
         post = new Post(caption, postFile.getOriginalFilename(), LocalDateTime.now().toString(), LocalDateTime.now().toString(), user);
         postRepo.save(post);
         return post;
