@@ -32,12 +32,12 @@ public class ReactionController {
         User user = userRepo.findById(userId).get();
         Post post = postRepo.findById(postId).get();
         Reaction reaction;
-        if(reactionRepo.findByUserId(userId)==null){
+        if(reactionRepo.findByUserId(userId)==null && reactionRepo.findByPostId(postId)==null){
             reaction = new Reaction(user, post, ReactionType.LIKE);
             reactionRepo.save(reaction);
             return reaction;
         }
-        else if(reactionRepo.findByUserId(userId).getReactionType() == ReactionType.LIKE) {
+        else if(reactionRepo.findByUserId(userId).getReactionType() == ReactionType.LIKE && reactionRepo.findByPostId(postId).getId() == postId){
             reactionRepo.delete(reactionRepo.findByUserId(userId));
             return null;
         }
@@ -57,12 +57,12 @@ public class ReactionController {
         User user = userRepo.findById(userId).get();
         Post post = postRepo.findById(postId).get();
         Reaction reaction;
-        if(reactionRepo.findByUserId(userId)==null){
+        if(reactionRepo.findByUserId(userId)==null && reactionRepo.findByPostId(postId)==null){
             reaction = new Reaction(user, post, ReactionType.DISLIKE);
             reactionRepo.save(reaction);
             return reaction;
         }
-        else if(reactionRepo.findByUserId(userId).getReactionType() == ReactionType.DISLIKE) {
+        else if(reactionRepo.findByUserId(userId).getReactionType() == ReactionType.DISLIKE && reactionRepo.findByPostId(postId).getId() == postId) {
             reactionRepo.delete(reactionRepo.findByUserId(userId));
             return null;
         }

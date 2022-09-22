@@ -11,4 +11,6 @@ public interface ReactionRepo extends JpaRepository<Reaction, Integer> {
     Reaction findByUserId(int userId);
 
     List<Reaction> findAllByPost(Post post);
+
+    Post findByPostId(int postId);
 }
