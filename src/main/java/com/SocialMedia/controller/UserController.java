@@ -23,11 +23,11 @@ public class UserController {
     @Autowired
     private PostRepo postRepo;
 
-    @GetMapping("/home")
-    public List<Post> home() {
-        List<Post>allPosts = postRepo.findAll();
-        return allPosts;
-    }
+//    @GetMapping("/home")
+//    public List<Post> home() {
+//        List<Post>allPosts = postRepo.findAll();
+//        return allPosts;
+//    }
 
     @PostMapping("/signup")
     public User signup(@RequestParam("name") String name, @RequestParam("email") String email,
@@ -38,7 +38,7 @@ public class UserController {
         return user;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public User login(@RequestParam("email") String email, @RequestParam("password") String password) {
         User user = userRepo.findByEmailAndPassword(email, password);
         return user;
