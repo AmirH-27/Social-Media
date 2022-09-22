@@ -7,10 +7,11 @@
 ### Task:
 
 - [x] 1. Login and Registration
-- [x] 2. Post
-- [x] 3. Like, Dislike, Comment
-- [x] 4. 2x Like or Dislike removes reaction
-- [ ] 5. Front-End
+- [x] 2. Spring Security
+- [x] 3. Post
+- [x] 4. Like, Dislike, Comment
+- [x] 5. 2x Like or Dislike removes reaction
+- [ ] 6. Front-End
 
 ## User: 
     
