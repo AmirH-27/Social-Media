@@ -1,4 +1,4 @@
-package com.SocialMedia;
+package com.SocialMedia.config;
 import com.SocialMedia.service.CustomAuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
