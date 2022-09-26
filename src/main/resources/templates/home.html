@@ -5,13 +5,19 @@
   <title>Hello World!</title>
 </head>
 <body>
-<h1 th:inline="text">Hello ${userName}</h1>
-<form th:action="@{/logout}" method="post">
-  <input type="submit" value="Sign Out"/><br/>
+<h1>Hello, </h1>
+<h1 th:text=${user.fullName}></h1>
+<form th:action="@{/add/post}" method="post" enctype="multipart/form-data">
 
-  <tr th:each="post : ${posts}">
-    <td th:text="${post.caption}"></td>
-    <td th:text="${post.createdAt}"></td><br/>
+    <input type="text" name="caption" placeholder="Caption"/>
+    <input type="file" name="postFile" class="form-control-file"><br/>
+    <input type="submit" value="Add Post"/><br/><br/>
+
+    <tr th:each="post : ${posts}">
+      <td><a th:href="@{/profile/{id}(id=${post.user.getId()})}" th:text="${post.user.getFullName()}" target="@{/profile/{id}=${post.user.getId()}"/></td>
+      <td th:text="${post.caption}"></td>
+      <td th:text="${post.createdAt}"></td><br/>
+    <a href="/logout">Logout</a>
 </form>
 </body>
 </html>

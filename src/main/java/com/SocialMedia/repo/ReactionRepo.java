@@ -3,8 +3,10 @@ package com.SocialMedia.repo;
 import com.SocialMedia.entity.Post;
 import com.SocialMedia.entity.Reaction;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ReactionRepo extends JpaRepository<Reaction, Integer> {
 
@@ -12,5 +14,6 @@ public interface ReactionRepo extends JpaRepository<Reaction, Integer> {
 
     List<Reaction> findAllByPost(Post post);
 
-    Post findByPostId(int postId);
+    Reaction findByPostId(int postId);
+
 }

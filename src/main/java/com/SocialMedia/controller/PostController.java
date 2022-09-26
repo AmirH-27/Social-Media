@@ -52,4 +52,9 @@ public class PostController {
         postRepo.deleteById(postId);
         return "Post deleted";
     }
+
+    @PostMapping("/post")
+    public List<Post> getPost(@RequestParam("postId") String email) {
+        return postRepo.findByUserId(userRepo.findByEmail(email).getId());
+    }
 }

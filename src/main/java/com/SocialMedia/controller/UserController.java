@@ -44,16 +44,16 @@ public class UserController {
         return user;
     }
 
-    @PostMapping("/update/profile")
-    public User update(@RequestParam("name") String name, @RequestParam("email") String email,
-                       @RequestParam("password") String password, @RequestParam("gender") char gender,
-                       @RequestParam("profilePicture") MultipartFile profilePicture) {
-        User user = userRepo.findByEmailAndPassword(email, password);
-        user.setFullName(name);
-        user.setGender(gender);
-        user.setProfilePicture(profilePicture.getOriginalFilename());
-        userRepo.save(user);
-        return user;
-    }
+//    @PostMapping("/update/profile")
+//    public User update(@RequestParam("name") String name, @RequestParam("email") String email,
+//                       @RequestParam("password") String password, @RequestParam("gender") char gender,
+//                       @RequestParam("profilePicture") MultipartFile profilePicture) {
+//        User user = userRepo.findByEmailAndPassword(email, password);
+//        user.setFullName(name);
+//        user.setGender(gender);
+//        user.setProfilePicture(profilePicture.getOriginalFilename());
+//        userRepo.save(user);
+//        return user;
+//    }
 
 }

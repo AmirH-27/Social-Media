@@ -30,4 +30,11 @@ public class Post {
         this.updatedAt = updatedAt;
         this.user = user;
     }
+
+    public Post(String caption, String createdAt, String updatedAt, User user) {
+        this.caption = caption;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.user = user;
+    }
 }
