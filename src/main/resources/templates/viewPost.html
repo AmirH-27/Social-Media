@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+  <title>Profile</title>
+</head>
+<body>
+<h1>Posted by, </h1>
+<h1 th:text=${post.user.fullName}></h1>
+<form th:action="@{/comment/{id}(id=${post.getId()})}" method="post">
+  Caption: <p th:text="${post.caption}"/><br/>
+  Posted at: <p th:text="${post.createdAt}"/><br/>
+  Likes: <p th:text="${likeCount}"/> Dislikes: <p th:text="${dislikeCount}"/>
+
+  <h3>Comments: </h3>
+    <tr th:each="comment : ${comments}">
+        <td th:text="${comment.user.getFullName()}"></td>
+        : <td th:text="${comment.comment}"></td><br/>
+    </tr>
+    <br/><br/>
+    <input type="text" name="comment" placeholder="Comment"/><br/><br/>
+    <input type="submit" value="Comment"/><br/><br/>
+</form>
+</body>
+</html>

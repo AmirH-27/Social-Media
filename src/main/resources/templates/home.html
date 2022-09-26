@@ -15,8 +15,9 @@
 
     <tr th:each="post : ${posts}">
       <td><a th:href="@{/profile/{id}(id=${post.user.getId()})}" th:text="${post.user.getFullName()}" target="@{/profile/{id}=${post.user.getId()}"/></td>
-      <td th:text="${post.caption}"></td>
+      <td><a th:href="@{/view/post/{id}(id=${post.getId()})}" th:text="${post.caption}"/></td>
       <td th:text="${post.createdAt}"></td><br/>
+    <tr>
     <a href="/logout">Logout</a>
 </form>
 </body>

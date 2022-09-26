@@ -1,9 +1,7 @@
 package com.SocialMedia.controller;
 
-import com.SocialMedia.entity.Post;
-import com.SocialMedia.entity.Reaction;
-import com.SocialMedia.entity.ReactionType;
-import com.SocialMedia.entity.User;
+import com.SocialMedia.entity.*;
+import com.SocialMedia.repo.CommentRepo;
 import com.SocialMedia.repo.PostRepo;
 import com.SocialMedia.repo.ReactionRepo;
 import com.SocialMedia.repo.UserRepo;
@@ -29,6 +27,9 @@ public class ViewController {
     private PostRepo postRepo;
     @Autowired
     private ReactionRepo reactionRepo;
+
+    @Autowired
+    private CommentRepo commentRepo;
 
     @GetMapping("/login")
     public String login() {
@@ -70,6 +71,35 @@ public class ViewController {
         user.setGender(gender);
         userRepo.save(user);
         return "redirect:/";
+    }
+
+    @GetMapping("view/post/{id}")
+    public String viewPost(Model model, @PathVariable int id){
+        model.addAttribute("post", postRepo.findById(id).get());
+        int likeCount = 0;
+        int dislikeCount = 0;
+        for (Reaction reaction : reactionRepo.findAll()) {
+            if (reaction.getPost().getId() == id) {
+                if (reaction.getReactionType().equals(ReactionType.LIKE)) {
+                    likeCount++;
+                } else if (reaction.getReactionType().equals(ReactionType.DISLIKE)) {
+                    dislikeCount++;
+                }
+            }
+        }
+        List<Comment> comments = commentRepo.findAllByPost(postRepo.findById(id).get());
+        model.addAttribute("likeCount", likeCount);
+        model.addAttribute("dislikeCount", dislikeCount);
+        model.addAttribute("comments", comments);
+        return "viewPost";
+    }
+
+    @PostMapping("comment/{id}")
+    public String comment(@ModelAttribute("comment") String text, @PathVariable int id){
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Comment comment = new Comment(text, userRepo.findByEmail(authentication.getName()), postRepo.findById(id).get());
+        commentRepo.save(comment);
+        return "redirect:/view/post/" + id;
     }
 
 }
