@@ -9,14 +9,12 @@ import com.SocialMedia.repo.PostRepo;
 import com.SocialMedia.repo.ReactionRepo;
 import com.SocialMedia.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/reaction")
 public class ReactionController {
     @Autowired
     private PostRepo postRepo;
@@ -29,55 +27,45 @@ public class ReactionController {
 
     @PostMapping("/like/post")
     public Reaction likePost(@RequestParam("userId") int userId, @RequestParam("postId") int postId) {
-        User user = userRepo.findById(userId).get();
-        Post post = postRepo.findById(postId).get();
-        Reaction reaction;
-        if(reactionRepo.findByUserId(userId)==null && reactionRepo.findByPostId(postId)==null){
-            reaction = new Reaction(user, post, ReactionType.LIKE);
-            reactionRepo.save(reaction);
-            return reaction;
-        }
-        else if(reactionRepo.findByUserId(userId).getReactionType() == ReactionType.LIKE && reactionRepo.findByPostId(postId).getId() == postId){
-            reactionRepo.delete(reactionRepo.findByUserId(userId));
+        Reaction reaction = reactionRepo.findByUserAndPost(userRepo.findById(userId).get(), postRepo.findById(postId).get());
+        if (reaction != null) {
+            if(reaction.getReactionType() == ReactionType.DISLIKE) {
+                reactionRepo.deleteById(reaction.getId());
+                reaction = new Reaction(userRepo.findById(userId).get(), postRepo.findById(postId).get(), ReactionType.LIKE);
+                reactionRepo.save(reaction);
+                return reaction;
+            }
+            reactionRepo.deleteById(reaction.getId());
             return null;
         }
-        else if(reactionRepo.findByUserId(userId).getReactionType() == ReactionType.DISLIKE){
-            reaction = reactionRepo.findByUserId(userId);
-            reaction.setReactionType(ReactionType.LIKE);
+        else {
+            reaction = new Reaction(userRepo.findById(userId).get(), postRepo.findById(postId).get(), ReactionType.LIKE);
             reactionRepo.save(reaction);
             return reaction;
-        }
-        else{
-            return null;
         }
     }
 
     @PostMapping("/dislike/post")
     public Reaction dislike(@RequestParam("userId") int userId, @RequestParam("postId") int postId) {
-        User user = userRepo.findById(userId).get();
-        Post post = postRepo.findById(postId).get();
-        Reaction reaction;
-        if(reactionRepo.findByUserId(userId)==null && reactionRepo.findByPostId(postId)==null){
-            reaction = new Reaction(user, post, ReactionType.DISLIKE);
-            reactionRepo.save(reaction);
-            return reaction;
-        }
-        else if(reactionRepo.findByUserId(userId).getReactionType() == ReactionType.DISLIKE && reactionRepo.findByPostId(postId).getId() == postId) {
-            reactionRepo.delete(reactionRepo.findByUserId(userId));
+        Reaction reaction = reactionRepo.findByUserAndPost(userRepo.findById(userId).get(), postRepo.findById(postId).get());
+        if (reaction != null) {
+            if(reaction.getReactionType() == ReactionType.LIKE) {
+                reactionRepo.deleteById(reaction.getId());
+                reaction = new Reaction(userRepo.findById(userId).get(), postRepo.findById(postId).get(), ReactionType.DISLIKE);
+                reactionRepo.save(reaction);
+                return reaction;
+            }
+            reactionRepo.deleteById(reaction.getId());
             return null;
         }
-        else if(reactionRepo.findByUserId(userId).getReactionType() == ReactionType.LIKE){
-            reaction = reactionRepo.findByUserId(userId);
-            reaction.setReactionType(ReactionType.DISLIKE);
+        else {
+            reaction = new Reaction(userRepo.findById(userId).get(), postRepo.findById(postId).get(), ReactionType.DISLIKE);
             reactionRepo.save(reaction);
             return reaction;
-        }
-        else{
-            return null;
         }
     }
 
-    @GetMapping("/post/reactions")
+    @GetMapping("/post")
     public List<Reaction> getPostReactions(@RequestParam("postId") int postId) {
         return reactionRepo.findAllByPost(postRepo.findById(postId).get());
     }

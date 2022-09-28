@@ -6,16 +6,14 @@ import com.SocialMedia.entity.User;
 import com.SocialMedia.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@RequestMapping("/post")
 public class PostController {
     @Autowired
     private PostRepo postRepo;
@@ -26,7 +24,7 @@ public class PostController {
     @Autowired
     private UserRepo userRepo;
 
-    @PostMapping("/user/add/post")
+    @PostMapping("/user/add")
     public Post userPost(@RequestParam("caption") String caption, @RequestParam("postFile") MultipartFile postFile,
                          @RequestParam("userId") int userId) {
         String createdAt = LocalDateTime.now().toString();
@@ -53,8 +51,8 @@ public class PostController {
         return "Post deleted";
     }
 
-    @PostMapping("/post")
-    public List<Post> getPost(@RequestParam("postId") String email) {
-        return postRepo.findByUserId(userRepo.findByEmail(email).getId());
+    @GetMapping("")
+    public List<Post> getPost(@RequestParam("userId") int userId) {
+        return postRepo.findByUserId(userRepo.findById(userId).get().getId());
     }
 }
