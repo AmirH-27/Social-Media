@@ -2,7 +2,7 @@
 
 ## Database Design
 
-![image](https://user-images.githubusercontent.com/65022657/191000109-8e9e2010-9419-41a8-928f-0f738040a337.png)
+![image](https://user-images.githubusercontent.com/65022657/193118925-39fd41bd-4826-4670-b0ea-b36aac1ae841.png)
 
 ### Task:
 
