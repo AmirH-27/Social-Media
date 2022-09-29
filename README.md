@@ -11,7 +11,8 @@
 - [x] 3. Post
 - [x] 4. Like, Dislike, Comment
 - [x] 5. 2x Like or Dislike removes reaction
-- [ ] 6. Front-End
+- [x] 6. Friends can be added
+- [x] 7. Front-End
 
 ## User: 
     
@@ -44,3 +45,10 @@
     -> Deletes from db when user clicks on the reaction again
     -> Changes form like to dislike and vice versa
     -> View reactions on a post
+ 
+## Add Friend:
+
+    -> Can add friends from existing users
+    -> Can view friend list
+    -> Can view friends of friend
+    -> Not a friend until the reciever accepts the friend request
