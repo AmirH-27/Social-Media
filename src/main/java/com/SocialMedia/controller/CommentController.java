@@ -3,7 +3,6 @@ package com.SocialMedia.controller;
 import com.SocialMedia.entity.Comment;
 import com.SocialMedia.repo.CommentRepo;
 import com.SocialMedia.repo.PostRepo;
-import com.SocialMedia.repo.ReactionRepo;
 import com.SocialMedia.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,6 @@ public class CommentController {
     private PostRepo postRepo;
     @Autowired
     private CommentRepo commentRepo;
-    @Autowired
-    private ReactionRepo reactionRepo;
     @Autowired
     private UserRepo userRepo;
     @PostMapping("/add")

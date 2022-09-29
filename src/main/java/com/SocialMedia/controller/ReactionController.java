@@ -1,10 +1,7 @@
 package com.SocialMedia.controller;
 
-import com.SocialMedia.entity.Post;
 import com.SocialMedia.entity.Reaction;
 import com.SocialMedia.entity.ReactionType;
-import com.SocialMedia.entity.User;
-import com.SocialMedia.repo.CommentRepo;
 import com.SocialMedia.repo.PostRepo;
 import com.SocialMedia.repo.ReactionRepo;
 import com.SocialMedia.repo.UserRepo;
@@ -18,8 +15,6 @@ import java.util.List;
 public class ReactionController {
     @Autowired
     private PostRepo postRepo;
-    @Autowired
-    private CommentRepo commentRepo;
     @Autowired
     private ReactionRepo reactionRepo;
     @Autowired

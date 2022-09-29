@@ -1,11 +1,9 @@
 package com.SocialMedia.controller;
 
-import com.SocialMedia.entity.Comment;
 import com.SocialMedia.entity.Post;
 import com.SocialMedia.entity.User;
 import com.SocialMedia.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,10 +15,6 @@ import java.util.List;
 public class PostController {
     @Autowired
     private PostRepo postRepo;
-    @Autowired
-    private CommentRepo commentRepo;
-    @Autowired
-    private ReactionRepo reactionRepo;
     @Autowired
     private UserRepo userRepo;
 

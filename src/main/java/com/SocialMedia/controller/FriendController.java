@@ -28,7 +28,20 @@ public class FriendController {
 
     @GetMapping("/list")
     public List<Friend> getFriends(@RequestParam("userId") int userId) {
-        return friendRepo.findAllByUser(userRepo.findById(userId).get());
+        List<Friend> friends = friendRepo.findAllByUser(userRepo.findById(userId).get());
+        List<Friend> friends1 = friendRepo.findAllByFriend(userRepo.findById(userId).get());
+        if(!friends.isEmpty() && friends1.isEmpty()) {
+            return friends;
+        }
+        else if(!friends1.isEmpty() && friends.isEmpty()) {
+            return friends1;
+        }
+        else{
+            List<Friend> friends2 = new ArrayList<>();
+            friends2.addAll(friends);
+            friends2.addAll(friends1);
+            return friends2;
+        }
     }
 
     @GetMapping("/requests")
@@ -43,10 +56,28 @@ public class FriendController {
     }
 
     @PostMapping("/accept")
-    public Friend acceptFriend(@RequestParam("friendId") int friendId, @RequestParam("userId") int userId) {
-        Friend friend = friendRepo.findByUserAndFriend(userRepo.findById(userId).get(), userRepo.findById(friendId).get());
+    public Friend acceptFriend(@RequestParam("userId") int userId, @RequestParam("friendId") int friendId) {
+        Friend friend = friendRepo.findByUserAndFriend(userRepo.findById(friendId).get(), userRepo.findById(userId).get());
         friend.setAccepted(true);
         friendRepo.save(friend);
         return friend;
+    }
+
+    @GetMapping("/isFriend")
+    public List<Friend> getFriendsOfFriends(@RequestParam("userId") int userId, @RequestParam("friendId") int friendId) {
+        List<Friend> friends = friendRepo.findAllByUser(userRepo.findById(userId).get());
+        List<Friend> friends1 = friendRepo.findAllByFriend(userRepo.findById(userId).get());
+        List<Friend> friendsOfFriend = new ArrayList<>();
+        for (Friend friend : friends) {
+            if (friend.isAccepted()) {
+                friendsOfFriend.add(friend);
+            }
+        }
+        for (Friend friend : friends1) {
+            if (friend.isAccepted()) {
+                friendsOfFriend.add(friend);
+            }
+        }
+        return friendsOfFriend;
     }
 }
