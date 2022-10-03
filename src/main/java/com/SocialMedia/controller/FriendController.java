@@ -20,7 +20,8 @@ public class FriendController {
 
     @PostMapping("/add")
     public Friend addFriend(@RequestParam("userId") int userId, @RequestParam("friendId") int friendId) {
-        if (userRepo.existsById(userId) && userRepo.existsById(friendId) && userId != friendId && friendRepo.findByUserAndFriend(userRepo.findById(friendId).get(), userRepo.findById(userId).get())==null) {
+        if (userRepo.existsById(userId) && userRepo.existsById(friendId) && userId != friendId &&
+                friendRepo.findByUserAndFriend(userRepo.findById(friendId).get(), userRepo.findById(userId).get())==null) {
             return friendRepo.save(new Friend(false, userRepo.findById(userId).get(), userRepo.findById(friendId).get()));
         }
         return null;
@@ -60,6 +61,13 @@ public class FriendController {
         Friend friend = friendRepo.findByUserAndFriend(userRepo.findById(friendId).get(), userRepo.findById(userId).get());
         friend.setAccepted(true);
         friendRepo.save(friend);
+        return friend;
+    }
+
+    @PostMapping("/delete")
+    public Friend deleteFriend(@RequestParam("userId") int userId, @RequestParam("friendId") int friendId) {
+        Friend friend = friendRepo.findByUserAndFriend(userRepo.findById(friendId).get(), userRepo.findById(userId).get());
+        friendRepo.delete(friend);
         return friend;
     }
 
