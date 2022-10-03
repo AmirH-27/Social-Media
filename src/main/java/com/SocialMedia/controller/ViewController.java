@@ -76,17 +76,8 @@ public class ViewController {
     @GetMapping("view/post/{id}")
     public String viewPost(Model model, @PathVariable int id){
         model.addAttribute("post", postRepo.findById(id).get());
-        int likeCount = 0;
-        int dislikeCount = 0;
-        for (Reaction reaction : reactionRepo.findAllByPost(postRepo.findById(id).get())) {
-//            if (reaction.getPost().getId() == id) {
-                if (reaction.getReactionType().equals(ReactionType.LIKE)) {
-                    likeCount++;
-                } else if (reaction.getReactionType().equals(ReactionType.DISLIKE)) {
-                    dislikeCount++;
-                }
-//            }
-        }
+        int likeCount = reactionRepo.countAllByPostIdAndReactionType(id, ReactionType.LIKE);
+        int dislikeCount = reactionRepo.countAllByPostIdAndReactionType(id, ReactionType.DISLIKE);;
         List<Comment> comments = commentRepo.findAllByPost(postRepo.findById(id).get());
         model.addAttribute("likeCount", likeCount);
         model.addAttribute("dislikeCount", dislikeCount);

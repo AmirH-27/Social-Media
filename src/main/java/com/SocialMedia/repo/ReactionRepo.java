@@ -2,6 +2,7 @@ package com.SocialMedia.repo;
 
 import com.SocialMedia.entity.Post;
 import com.SocialMedia.entity.Reaction;
+import com.SocialMedia.entity.ReactionType;
 import com.SocialMedia.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 //import org.springframework.security.core.userdetails.User;
@@ -18,4 +19,6 @@ public interface ReactionRepo extends JpaRepository<Reaction, Integer> {
     Reaction findByPostId(int postId);
 
     Reaction findByUserAndPost(User user, Post post);
+
+    int countAllByPostIdAndReactionType(int id, ReactionType reactionType);
 }

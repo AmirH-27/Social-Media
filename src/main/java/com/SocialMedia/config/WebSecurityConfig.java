@@ -28,6 +28,11 @@ public class WebSecurityConfig {
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/friend/**").permitAll()
+                .antMatchers("/user/**").permitAll()
+                .antMatchers("/post/**").permitAll()
+                .antMatchers("/comment/**").permitAll()
+                .antMatchers("/reaction/**").permitAll()
+
                 .antMatchers("/api/**").permitAll().and().authorizeRequests()
                 .anyRequest().authenticated()
                 .and()

@@ -1,13 +1,17 @@
 package com.SocialMedia.controller;
 
+import com.SocialMedia.dto.ApiPostRes;
 import com.SocialMedia.entity.Post;
+import com.SocialMedia.entity.ReactionType;
 import com.SocialMedia.entity.User;
 import com.SocialMedia.repo.*;
+import com.SocialMedia.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,6 +21,16 @@ public class PostController {
     private PostRepo postRepo;
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ReactionRepo reactionRepo;
+
+    @Autowired
+    private CommentRepo commentRepo;
+
+    @Autowired
+    private PostService postService;
+
 
     @PostMapping("/user/add")
     public Post userPost(@RequestParam("caption") String caption, @RequestParam("postFile") MultipartFile postFile,
@@ -45,8 +59,22 @@ public class PostController {
         return "Post deleted";
     }
 
-    @GetMapping("")
-    public List<Post> getPost(@RequestParam("userId") int userId) {
-        return postRepo.findByUserId(userRepo.findById(userId).get().getId());
+    @GetMapping("/all/{pageNo}/{pageSize}")
+    public List<ApiPostRes> getPostByApiRes(@PathVariable("pageNo") int pageNo, @PathVariable("pageSize") int pageSize) {
+        List<Post> posts = postService.findPaginated(pageNo, pageSize);
+        List<ApiPostRes> apiPostResList = new ArrayList<>();
+        for(Post post : posts){
+            apiPostResList.add(new ApiPostRes(reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.LIKE),
+                    reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.DISLIKE),
+                    postRepo.findById(post.getId()).get(), commentRepo.findAllByPost(postRepo.findById(post.getId()).get())));
+        }
+        return apiPostResList;
+    }
+
+    @GetMapping("/{id}")
+    public ApiPostRes getPostById(@PathVariable("id") int id) {
+        return new ApiPostRes(reactionRepo.countAllByPostIdAndReactionType(id, ReactionType.LIKE),
+                reactionRepo.countAllByPostIdAndReactionType(id, ReactionType.DISLIKE),
+                postRepo.findById(id).get(), commentRepo.findAllByPost(postRepo.findById(id).get()));
     }
 }
