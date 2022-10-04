@@ -1,9 +1,7 @@
 package com.SocialMedia.controller;
 
 import com.SocialMedia.dto.ApiPostRes;
-import com.SocialMedia.entity.Post;
-import com.SocialMedia.entity.ReactionType;
-import com.SocialMedia.entity.User;
+import com.SocialMedia.entity.*;
 import com.SocialMedia.repo.*;
 import com.SocialMedia.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;

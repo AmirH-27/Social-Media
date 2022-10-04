@@ -1,6 +1,6 @@
 package com.SocialMedia.repo;
 
-import com.SocialMedia.entity.User;
+import com.SocialMedia.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepo extends JpaRepository<User, Integer> {

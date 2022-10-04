@@ -19,10 +19,6 @@ import java.util.List;
 public class PostServiceImp implements PostService {
     @Autowired
     private PostRepo postRepo;
-    @Autowired
-    private CommentRepo commentRepo;
-    @Autowired
-    private ReactionRepo reactionRepo;
 
     @Override
     public List<Post> findPaginated(int pageNo, int pageSize) {

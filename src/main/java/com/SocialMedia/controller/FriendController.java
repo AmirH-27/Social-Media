@@ -1,8 +1,10 @@
 package com.SocialMedia.controller;
 
+import com.SocialMedia.dto.ApiFriendRes;
 import com.SocialMedia.entity.Friend;
 import com.SocialMedia.repo.FriendRepo;
 import com.SocialMedia.repo.UserRepo;
+import com.SocialMedia.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,9 @@ public class FriendController {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private FriendService friendService;
+
     @PostMapping("/add")
     public Friend addFriend(@RequestParam("userId") int userId, @RequestParam("friendId") int friendId) {
         if (userRepo.existsById(userId) && userRepo.existsById(friendId) && userId != friendId &&
@@ -27,22 +32,14 @@ public class FriendController {
         return null;
     }
 
-    @GetMapping("/list")
-    public List<Friend> getFriends(@RequestParam("userId") int userId) {
-        List<Friend> friends = friendRepo.findAllByUser(userRepo.findById(userId).get());
-        List<Friend> friends1 = friendRepo.findAllByFriend(userRepo.findById(userId).get());
-        if(!friends.isEmpty() && friends1.isEmpty()) {
-            return friends;
+    @GetMapping("/list/{pageNo}/{pageSize}")
+    public List<ApiFriendRes> getFriends(@RequestParam("userId") int userId, @PathVariable int pageNo, @PathVariable int pageSize) {
+        List<Friend> friends = friendService.findPaginated(userId, pageNo, pageSize);
+        List<ApiFriendRes> apiFriendRes = new ArrayList<>();
+        for (Friend friend : friends) {
+            apiFriendRes.add(new ApiFriendRes(friends.size(), friend));
         }
-        else if(!friends1.isEmpty() && friends.isEmpty()) {
-            return friends1;
-        }
-        else{
-            List<Friend> friends2 = new ArrayList<>();
-            friends2.addAll(friends);
-            friends2.addAll(friends1);
-            return friends2;
-        }
+        return apiFriendRes;
     }
 
     @GetMapping("/requests")
@@ -72,7 +69,7 @@ public class FriendController {
     }
 
     @GetMapping("/isFriend")
-    public List<Friend> getFriendsOfFriends(@RequestParam("userId") int userId, @RequestParam("friendId") int friendId) {
+    public List<Friend> getFriendsOfFriends(@RequestParam("userId") int userId) {
         List<Friend> friends = friendRepo.findAllByUser(userRepo.findById(userId).get());
         List<Friend> friends1 = friendRepo.findAllByFriend(userRepo.findById(userId).get());
         List<Friend> friendsOfFriend = new ArrayList<>();
