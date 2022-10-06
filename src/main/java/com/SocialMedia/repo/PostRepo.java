@@ -7,7 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface PostRepo extends JpaRepository<Post, Integer> {
-    Page<Post> findAllByUserId(int userId, Pageable pageable);
-
-    long countAllByUserId(int userId);
+    Page<Post> findAllByUserId(int userId, Pageable paging);
 }

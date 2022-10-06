@@ -21,17 +21,17 @@ public class PostServiceImp implements PostService {
     private PostRepo postRepo;
 
     @Override
-    public List<Post> findPaginated(int pageNo, int pageSize) {
+    public Page<Post> findPaginated(int pageNo, int pageSize) {
         Pageable paging = PageRequest.of(pageNo, pageSize);
         Page<Post> posts = postRepo.findAll(paging);
-        return posts.toList();
+        return posts;
     }
 
     @Override
-    public List<Post> findPaginatedByUser(int pageNo, int pageSize, int userId) {
+    public Page<Post> findPaginatedByUser(int pageNo, int pageSize, int userId) {
         Pageable paging = PageRequest.of(pageNo, pageSize);
         Page<Post> posts = postRepo.findAllByUserId(userId, paging);
-        return posts.toList();
+        return posts;
     }
 
 }

@@ -12,8 +12,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    private UserRepo userRepo;
-    private PostRepo postRepo;
+    private final UserRepo userRepo;
+    private final PostRepo postRepo;
 
     public UserController(UserRepo userRepo, PostRepo postRepo) {
         this.userRepo = userRepo;
@@ -22,8 +22,7 @@ public class UserController {
 
     @GetMapping("/home")
     public List<Post> home() {
-        List<Post>allPosts = postRepo.findAll();
-        return allPosts;
+        return postRepo.findAll();
     }
 
     @PostMapping("/signup")
@@ -35,10 +34,9 @@ public class UserController {
         return user;
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/sign-in")
     public User login(@RequestParam("email") String email, @RequestParam("password") String password) {
-        User user = userRepo.findByEmailAndPassword(email, password);
-        return user;
+        return userRepo.findByEmailAndPassword(email, password);
     }
 
     @PostMapping("/update/profile")

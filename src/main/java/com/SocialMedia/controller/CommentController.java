@@ -12,9 +12,9 @@ import java.util.List;
 @RequestMapping("/comment")
 public class CommentController {
 
-    private PostRepo postRepo;
-    private CommentRepo commentRepo;
-    private UserRepo userRepo;
+    private final PostRepo postRepo;
+    private final CommentRepo commentRepo;
+    private final UserRepo userRepo;
 
     public CommentController(PostRepo postRepo, CommentRepo commentRepo, UserRepo userRepo) {
         this.postRepo = postRepo;

@@ -4,30 +4,40 @@ import com.SocialMedia.dto.ApiPostRes;
 import com.SocialMedia.entity.*;
 import com.SocialMedia.repo.*;
 import com.SocialMedia.service.PostService;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/post")
 public class PostController {
 
-    private PostRepo postRepo;
-    private UserRepo userRepo;
-    private ReactionRepo reactionRepo;
-    private CommentRepo commentRepo;
-    private PostService postService;
+    private final PostRepo postRepo;
+    private final UserRepo userRepo;
+    private final ReactionRepo reactionRepo;
+    private final CommentRepo commentRepo;
+    private final PostService postService;
     public PostController(PostRepo postRepo, UserRepo userRepo, ReactionRepo reactionRepo, CommentRepo commentRepo, PostService postService) {
         this.postRepo = postRepo;
         this.userRepo = userRepo;
         this.reactionRepo = reactionRepo;
         this.commentRepo = commentRepo;
         this.postService = postService;
+    }
+    //get post with pagination
+    public List<ApiPostRes> getApiPostRes(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, @NotNull Page<Post> posts) {
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+        return posts.map(post -> new ApiPostRes(posts.getNumberOfElements(), reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.LIKE),
+                reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.DISLIKE),
+                postRepo.findById(post.getId()).get(), commentRepo.findAllByPost(postRepo.findById(post.getId()).get()), pageNo+1, paging, posts.getTotalPages())
+        ).getContent();
     }
 
     @PostMapping("/user/add")
@@ -56,36 +66,25 @@ public class PostController {
         postRepo.deleteById(postId);
         return "Post deleted";
     }
-
+    //get all post
     @GetMapping("/all")
     public List<ApiPostRes> getPostByApiRes(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
-        List<Post> posts = postService.findPaginated(pageNo, pageSize);
+        Page<Post> posts = postService.findPaginated(pageNo, pageSize);
         return getApiPostRes(pageNo, pageSize, posts);
     }
-
-    @GetMapping("/{id}")//by post id
+    //get post by post id
+    @GetMapping("/{id}")
     public ApiPostRes getPostById(@PathVariable("id") int id) {
         return new ApiPostRes(reactionRepo.countAllByPostIdAndReactionType(id, ReactionType.LIKE),
                 reactionRepo.countAllByPostIdAndReactionType(id, ReactionType.DISLIKE),
                 postRepo.findById(id).get(), commentRepo.findAllByPost(postRepo.findById(id).get())
         );
     }
-
-    @GetMapping("/user")//by user id
+    //get post by user with pagination
+    @GetMapping("/user")
     public List<ApiPostRes> getPostByUser(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, @RequestParam("userId") int userId) {
-        List<Post> posts = postService.findPaginatedByUser(pageNo, pageSize, userId);
+        Page<Post> posts = postService.findPaginatedByUser(pageNo, pageSize, userId);
         return getApiPostRes(pageNo, pageSize, posts);
     }
 
-    public List<ApiPostRes> getApiPostRes(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, List<Post> posts) {
-        List<ApiPostRes> apiPostResList = new ArrayList<>();
-        int counter = 0;
-        for(Post post : posts){
-            apiPostResList.add(new ApiPostRes(counter++, reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.LIKE),
-                    reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.DISLIKE),
-                    postRepo.findById(post.getId()).get(), commentRepo.findAllByPost(postRepo.findById(post.getId()).get()), pageNo+1, PageRequest.of(pageNo, pageSize))
-            );
-        }
-        return apiPostResList;
-    }
 }

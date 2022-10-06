@@ -20,10 +20,17 @@ public class FriendServiceImp implements FriendService{
         this.friendRepo = friendRepo;
     }
     @Override
-    public List<Friend> findPaginated(int userId, int pageNo, int pageSize) {
+    public Page<Friend> findPaginated(int userId, int pageNo, int pageSize) {
         Pageable paging = PageRequest.of(pageNo, pageSize);
-        Page<Friend> friends = friendRepo.findAllMutual(userId, paging);
-        return friends.toList();
+        Page<Friend> friends = friendRepo.findAllByUser(userId, paging);
+        return friends;
+    }
+
+    @Override
+    public Page<Friend> findPaginatedByUserAndAcceptedFalse(int pageNo, int pageSize, int userId) {
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+        Page<Friend> friends = friendRepo.findAllByUserAndIsAcceptedFalse(userId, paging);
+        return friends;
     }
 
 }

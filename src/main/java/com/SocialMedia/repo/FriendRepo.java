@@ -16,9 +16,11 @@ public interface FriendRepo extends JpaRepository<Friend, Integer> {
 
     Friend findByFriendId(int user);
 
-    @Query(value="SELECT * FROM friend WHERE (user_id OR friend_id = ?1) AND is_accepted = true",
+    @Query(value="SELECT * FROM friend WHERE user_id = ?1 AND is_accepted = false", nativeQuery = true)
+    Page<Friend> findAllByUserAndIsAcceptedFalse(int userId, Pageable paging);
+    @Query(value="SELECT * FROM friend WHERE (user_id = ?1 OR friend_id = ?1) AND is_accepted = true",
             nativeQuery = true)
-    Page<Friend> findAllMutual(Integer userId, Pageable pageable);
+    Page<Friend> findAllByUser(Integer userId, Pageable pageable);
 
     @Query(value="SELECT * FROM friend WHERE (user_id = ?1 AND friend_id = ?2) OR (user_id = ?2 AND friend_id = ?1) AND is_accepted = true",
             nativeQuery = true)
@@ -26,4 +28,6 @@ public interface FriendRepo extends JpaRepository<Friend, Integer> {
 
     @Query(value="select * from friend where user_id = ?1 union all select * from friend where friend_id = ?1", nativeQuery = true)
     List<Friend> findFriendIds(Integer userId);
+
+
 }

@@ -1,24 +1,27 @@
 package com.SocialMedia.controller;
 
+import com.SocialMedia.dto.ApiFriendRequestRes;
 import com.SocialMedia.dto.ApiFriendRes;
-import com.SocialMedia.dto.ApiFriendsOfFriends;
 import com.SocialMedia.entity.Friend;
 import com.SocialMedia.repo.FriendRepo;
 import com.SocialMedia.repo.UserRepo;
 import com.SocialMedia.service.FriendService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/friend")
 public class FriendController {
 
-    private FriendRepo friendRepo;
-    private UserRepo userRepo;
-    private FriendService friendService;
+    private final FriendRepo friendRepo;
+    private final UserRepo userRepo;
+    private final FriendService friendService;
     public FriendController(FriendRepo friendRepo, UserRepo userRepo, FriendService friendService) {
         this.friendRepo = friendRepo;
         this.userRepo = userRepo;
@@ -35,24 +38,19 @@ public class FriendController {
 
     @GetMapping("/list")
     public List<ApiFriendRes> getFriends(@RequestParam("userId") int userId, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
-        List<Friend> friends = friendService.findPaginated(userId, pageNo, pageSize);
+        Page<Friend> friends = friendService.findPaginated(userId, pageNo, pageSize);
         List<ApiFriendRes> apiFriendRes = new ArrayList<>();
-        int count = 0;
         for (Friend friend : friends) {
-            apiFriendRes.add(new ApiFriendRes(count++, friend, PageRequest.of(pageNo, pageSize)));
+            apiFriendRes.add(new ApiFriendRes(friends.getNumberOfElements(), friend, PageRequest.of(pageNo, pageSize), friends.getTotalPages()));
         }
         return apiFriendRes;
     }
 
     @GetMapping("/requests")
-    public List<Friend> getFriendRequests(@RequestParam("userId") int userId) {
-        List<Friend> requests = new ArrayList<>();
-        for (Friend friend : friendRepo.findAllByUser(userRepo.findById(userId).get())) {
-            if (!friend.isAccepted()) {
-                requests.add(friend);
-            }
-        }
-        return requests;
+    public List<ApiFriendRequestRes> getFriendRequests(@RequestParam("userId") int userId, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+        Page<Friend> friends = friendRepo.findAllByUserAndIsAcceptedFalse(userId, paging);
+        return friends.map(friend -> new ApiFriendRequestRes(friends.getNumberOfElements(), friends.toList(), PageRequest.of(pageNo, pageSize), friends.getTotalPages())).getContent();
     }
 
     @PostMapping("/accept")
@@ -71,6 +69,7 @@ public class FriendController {
     }
     @GetMapping("/friendsOfFriends")
     public List<Friend> getFriendsOfFriends(@RequestParam("userId") int userId, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
-        return friendRepo.findFriendIds(userId);
+        //todo
+        return null;
     }
 }

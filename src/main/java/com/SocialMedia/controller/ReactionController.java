@@ -5,6 +5,7 @@ import com.SocialMedia.entity.ReactionType;
 import com.SocialMedia.repo.PostRepo;
 import com.SocialMedia.repo.ReactionRepo;
 import com.SocialMedia.repo.UserRepo;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,9 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/reaction")
 public class ReactionController {
-    private PostRepo postRepo;
-    private ReactionRepo reactionRepo;
-    private UserRepo userRepo;
+    private final PostRepo postRepo;
+    private final ReactionRepo reactionRepo;
+    private final UserRepo userRepo;
     public ReactionController(PostRepo postRepo, ReactionRepo reactionRepo, UserRepo userRepo) {
         this.postRepo = postRepo;
         this.reactionRepo = reactionRepo;
