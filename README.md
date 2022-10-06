@@ -13,6 +13,8 @@
 - [x] 5. 2x Like or Dislike removes reaction
 - [x] 6. Friends can be added
 - [x] 7. Front-End
+- [x] 8. Pagination
+- [ ] 9. Friends of Friend
 
 ## User: 
     
