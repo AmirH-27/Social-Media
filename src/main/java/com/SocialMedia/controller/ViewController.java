@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.View;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,15 +22,18 @@ import java.util.Map;
 
 @Controller
 public class ViewController {
-    @Autowired
-    private UserRepo userRepo;
-    @Autowired
-    private PostRepo postRepo;
-    @Autowired
-    private ReactionRepo reactionRepo;
 
-    @Autowired
+    private UserRepo userRepo;
+    private PostRepo postRepo;
+    private ReactionRepo reactionRepo;
     private CommentRepo commentRepo;
+
+    public ViewController(UserRepo userRepo, PostRepo postRepo, ReactionRepo reactionRepo, CommentRepo commentRepo) {
+        this.userRepo = userRepo;
+        this.postRepo = postRepo;
+        this.reactionRepo = reactionRepo;
+        this.commentRepo = commentRepo;
+    }
 
     @GetMapping("/login")
     public String login() {

@@ -4,7 +4,6 @@ import com.SocialMedia.entity.Comment;
 import com.SocialMedia.repo.CommentRepo;
 import com.SocialMedia.repo.PostRepo;
 import com.SocialMedia.repo.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,12 +11,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
-    @Autowired
+
     private PostRepo postRepo;
-    @Autowired
     private CommentRepo commentRepo;
-    @Autowired
     private UserRepo userRepo;
+
+    public CommentController(PostRepo postRepo, CommentRepo commentRepo, UserRepo userRepo) {
+        this.postRepo = postRepo;
+        this.commentRepo = commentRepo;
+        this.userRepo = userRepo;
+    }
     @PostMapping("/add")
     public Comment comment(@RequestParam("comment") String text, @RequestParam("userId") int userId, @RequestParam("postId") int postId) {
         Comment comment = new Comment(text, userRepo.findById(userId).get(), postRepo.findById(postId).get());

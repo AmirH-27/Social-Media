@@ -5,7 +5,6 @@ import com.SocialMedia.entity.ReactionType;
 import com.SocialMedia.repo.PostRepo;
 import com.SocialMedia.repo.ReactionRepo;
 import com.SocialMedia.repo.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,12 +12,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/reaction")
 public class ReactionController {
-    @Autowired
     private PostRepo postRepo;
-    @Autowired
     private ReactionRepo reactionRepo;
-    @Autowired
     private UserRepo userRepo;
+    public ReactionController(PostRepo postRepo, ReactionRepo reactionRepo, UserRepo userRepo) {
+        this.postRepo = postRepo;
+        this.reactionRepo = reactionRepo;
+        this.userRepo = userRepo;
+    }
 
     @PostMapping("/like/post")
     public Reaction likePost(@RequestParam("userId") int userId, @RequestParam("postId") int postId) {

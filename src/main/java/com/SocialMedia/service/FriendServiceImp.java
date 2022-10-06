@@ -13,8 +13,12 @@ import java.util.List;
 
 @Service
 public class FriendServiceImp implements FriendService{
-    @Autowired
+
     private FriendRepo friendRepo;
+
+    public FriendServiceImp(FriendRepo friendRepo) {
+        this.friendRepo = friendRepo;
+    }
     @Override
     public List<Friend> findPaginated(int userId, int pageNo, int pageSize) {
         Pageable paging = PageRequest.of(pageNo, pageSize);

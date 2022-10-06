@@ -27,4 +27,11 @@ public class PostServiceImp implements PostService {
         return posts.toList();
     }
 
+    @Override
+    public List<Post> findPaginatedByUser(int pageNo, int pageSize, int userId) {
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+        Page<Post> posts = postRepo.findAllByUserId(userId, paging);
+        return posts.toList();
+    }
+
 }
