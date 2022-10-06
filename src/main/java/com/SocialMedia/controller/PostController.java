@@ -57,20 +57,20 @@ public class PostController {
         return "Post deleted";
     }
 
-    @GetMapping("/all/{pageNo}/{pageSize}")
-    public List<ApiPostRes> getPostByApiRes(@PathVariable("pageNo") int pageNo, @PathVariable("pageSize") int pageSize) {
+    @GetMapping("/all")
+    public List<ApiPostRes> getPostByApiRes(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
         List<Post> posts = postService.findPaginated(pageNo, pageSize);
         List<ApiPostRes> apiPostResList = new ArrayList<>();
         for(Post post : posts){
-            apiPostResList.add(new ApiPostRes(reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.LIKE),
+            apiPostResList.add(new ApiPostRes(posts.size(), reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.LIKE),
                     reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.DISLIKE),
-                    postRepo.findById(post.getId()).get(), commentRepo.findAllByPost(postRepo.findById(post.getId()).get())));
+                    postRepo.findById(post.getId()).get(), commentRepo.findAllByPost(postRepo.findById(post.getId()).get()), pageNo+1));
         }
         return apiPostResList;
     }
 
     @GetMapping("/{id}")
-    public ApiPostRes getPostById(@PathVariable("id") int id) {
+    public ApiPostRes getPostById(@PathVariable("id") int id, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
         return new ApiPostRes(reactionRepo.countAllByPostIdAndReactionType(id, ReactionType.LIKE),
                 reactionRepo.countAllByPostIdAndReactionType(id, ReactionType.DISLIKE),
                 postRepo.findById(id).get(), commentRepo.findAllByPost(postRepo.findById(id).get()));
