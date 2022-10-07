@@ -10,10 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/post")
@@ -36,7 +34,8 @@ public class PostController {
         Pageable paging = PageRequest.of(pageNo, pageSize);
         return posts.map(post -> new ApiPostRes(posts.getNumberOfElements(), reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.LIKE),
                 reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.DISLIKE),
-                postRepo.findById(post.getId()).get(), commentRepo.findAllByPost(postRepo.findById(post.getId()).get()), pageNo+1, paging, posts.getTotalPages())
+                postRepo.findById(post.getId()).get(), commentRepo.findAllByPost(postRepo.findById(post.getId()).get()),
+                pageNo+1, paging, posts.getTotalPages())
         ).getContent();
     }
 
@@ -45,7 +44,8 @@ public class PostController {
                          @RequestParam("userId") int userId) {
         String createdAt = LocalDateTime.now().toString();
         String updatedAt = LocalDateTime.now().toString();
-        Post post = new Post(caption, postFile.getOriginalFilename(), createdAt, updatedAt, userRepo.findById(userId).get());
+        Post post = new Post(caption, postFile.getOriginalFilename(), createdAt,
+                updatedAt, userRepo.findById(userId).get());
         postRepo.save(post);
         return post;
     }
@@ -56,7 +56,8 @@ public class PostController {
         Post post = postRepo.findById(postId).get();
         User user = userRepo.findById(userId).get();
         postRepo.delete(post);
-        post = new Post(caption, postFile.getOriginalFilename(), LocalDateTime.now().toString(), LocalDateTime.now().toString(), user);
+        post = new Post(caption, postFile.getOriginalFilename(), LocalDateTime.now().toString(),
+                LocalDateTime.now().toString(), user);
         postRepo.save(post);
         return post;
     }

@@ -1,8 +1,10 @@
 package com.SocialMedia.controller;
 
+import com.SocialMedia.dto.ApiFoFRes;
 import com.SocialMedia.dto.ApiFriendRequestRes;
 import com.SocialMedia.dto.ApiFriendRes;
 import com.SocialMedia.entity.Friend;
+import com.SocialMedia.entity.User;
 import com.SocialMedia.repo.FriendRepo;
 import com.SocialMedia.repo.UserRepo;
 import com.SocialMedia.service.FriendService;
@@ -10,10 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 @RestController
 @RequestMapping("/friend")
@@ -37,20 +38,18 @@ public class FriendController {
     }
 
     @GetMapping("/list")
-    public List<ApiFriendRes> getFriends(@RequestParam("userId") int userId, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
-        Page<Friend> friends = friendService.findPaginated(userId, pageNo, pageSize);
-        List<ApiFriendRes> apiFriendRes = new ArrayList<>();
-        for (Friend friend : friends) {
-            apiFriendRes.add(new ApiFriendRes(friends.getNumberOfElements(), friend, PageRequest.of(pageNo, pageSize), friends.getTotalPages()));
-        }
-        return apiFriendRes;
+    public ApiFriendRes getFriends(@RequestParam("userId") int userId, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
+        Page<User> friendsOfFriends = friendService.findPaginatedFoF(userId, pageNo, pageSize);
+       return new ApiFriendRes(userRepo.findById(userId).get(), friendsOfFriends.getNumberOfElements(),
+                friendsOfFriends.getContent(), PageRequest.of(pageNo, pageSize), friendsOfFriends.getTotalPages());
     }
 
     @GetMapping("/requests")
     public List<ApiFriendRequestRes> getFriendRequests(@RequestParam("userId") int userId, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
         Pageable paging = PageRequest.of(pageNo, pageSize);
         Page<Friend> friends = friendRepo.findAllByUserAndIsAcceptedFalse(userId, paging);
-        return friends.map(friend -> new ApiFriendRequestRes(friends.getNumberOfElements(), friends.toList(), PageRequest.of(pageNo, pageSize), friends.getTotalPages())).getContent();
+        return friends.map(friend -> new ApiFriendRequestRes(friends.getNumberOfElements(), friends.toList(),
+                PageRequest.of(pageNo, pageSize), friends.getTotalPages())).getContent();
     }
 
     @PostMapping("/accept")
@@ -68,8 +67,14 @@ public class FriendController {
         return friend;
     }
     @GetMapping("/friendsOfFriends")
-    public List<Friend> getFriendsOfFriends(@RequestParam("userId") int userId, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
-        //todo
-        return null;
+    public List<ApiFoFRes> getFriendsOfFriends(@RequestParam("userId") int userId, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
+        Page<User> friendsOfFriends = friendService.findPaginatedFoF(userId, pageNo, pageSize);
+        List<ApiFoFRes> apiFoFRes = new ArrayList<>();
+        for (User user : friendsOfFriends) {
+            Page<User> friends = friendService.findPaginated(user.getId(), pageNo, pageSize);
+            apiFoFRes.add(new ApiFoFRes(user, friends.getNumberOfElements(), friends.getContent(),
+                    PageRequest.of(pageNo, pageSize), friends.getTotalPages()));
+        }
+        return apiFoFRes;
     }
 }

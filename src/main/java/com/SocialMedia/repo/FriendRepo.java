@@ -26,8 +26,11 @@ public interface FriendRepo extends JpaRepository<Friend, Integer> {
             nativeQuery = true)
     Friend findFriend(Integer userId, Integer friendId);
 
-    @Query(value="select * from friend where user_id = ?1 union all select * from friend where friend_id = ?1", nativeQuery = true)
-    List<Friend> findFriendIds(Integer userId);
+    @Query(value="SELECT friend_id FROM friend WHERE user_id = ?1 AND is_accepted = true", nativeQuery = true)
+    List<Integer> findFriendIds(Integer userId);
 
-
+    @Query(value="SELECT user_id FROM friend WHERE friend_id = ?1 AND is_accepted = true\n" +
+            "union all\n" +
+            "SELECT friend_id FROM friend WHERE user_id = ?1 AND is_accepted = true", nativeQuery = true)
+    Page<Integer> findFriend(Integer userId, Pageable pageable);
 }
