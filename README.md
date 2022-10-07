@@ -14,7 +14,7 @@
 - [x] 6. Friends can be added
 - [x] 7. Front-End
 - [x] 8. Pagination
-- [ ] 9. Friends of Friend
+- [x] 9. Friends of Friend
 
 ## User: 
     
@@ -30,7 +30,8 @@
     -> Read
     -> Update
     -> Delete
-    -> View All
+    -> View All (with reaction and comments)
+    -> View All posts by a User (with reaction and comments)
 
 ## Comment: 
     
@@ -48,9 +49,10 @@
     -> Changes form like to dislike and vice versa
     -> View reactions on a post
  
-## Add Friend:
+## Friend:
 
     -> Can add friends from existing users
-    -> Can view friend list
-    -> Can view friends of friend
+    -> Can view friend list (returns a list of user objects)
+    -> Can view friends of friend (returns a list of user objects)
     -> Not a friend until the reciever accepts the friend request
+
