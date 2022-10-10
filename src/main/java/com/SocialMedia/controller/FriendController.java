@@ -46,8 +46,7 @@ public class FriendController {
 
     @GetMapping("/requests")
     public List<ApiFriendRequestRes> getFriendRequests(@RequestParam("userId") int userId, @RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
-        Pageable paging = PageRequest.of(pageNo, pageSize);
-        Page<Friend> friends = friendRepo.findAllByUserAndIsAcceptedFalse(userId, paging);
+        Page<Friend> friends = friendService.findPaginatedByUserAndAcceptedFalse(pageNo, pageSize, userId);
         return friends.map(friend -> new ApiFriendRequestRes(friends.getNumberOfElements(), friends.toList(),
                 PageRequest.of(pageNo, pageSize), friends.getTotalPages())).getContent();
     }

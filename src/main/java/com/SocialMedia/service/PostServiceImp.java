@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,15 +22,17 @@ public class PostServiceImp implements PostService {
     private PostRepo postRepo;
 
     @Override
-    public Page<Post> findPaginated(int pageNo, int pageSize) {
-        Pageable paging = PageRequest.of(pageNo, pageSize);
+    public Page<Post> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) {
+        Sort sort = sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable paging = PageRequest.of(pageNo, pageSize, sort);
         Page<Post> posts = postRepo.findAll(paging);
         return posts;
     }
 
     @Override
-    public Page<Post> findPaginatedByUser(int pageNo, int pageSize, int userId) {
-        Pageable paging = PageRequest.of(pageNo, pageSize);
+    public Page<Post> findPaginatedByUser(int pageNo, int pageSize, int userId, String sortField, String sortDir) {
+        Sort sort = sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable paging = PageRequest.of(pageNo, pageSize, sort);
         Page<Post> posts = postRepo.findAllByUserId(userId, paging);
         return posts;
     }

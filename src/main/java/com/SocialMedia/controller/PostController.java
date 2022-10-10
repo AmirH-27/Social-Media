@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
@@ -31,11 +32,10 @@ public class PostController {
     }
     //get post with pagination
     public List<ApiPostRes> getApiPostRes(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, @NotNull Page<Post> posts) {
-        Pageable paging = PageRequest.of(pageNo, pageSize);
         return posts.map(post -> new ApiPostRes(posts.getNumberOfElements(), reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.LIKE),
                 reactionRepo.countAllByPostIdAndReactionType(post.getId(), ReactionType.DISLIKE),
                 postRepo.findById(post.getId()).get(), commentRepo.findAllByPost(postRepo.findById(post.getId()).get()),
-                pageNo+1, paging, posts.getTotalPages())
+                pageNo+1, PageRequest.of(pageNo, pageSize), posts.getTotalPages())
         ).getContent();
     }
 
@@ -69,8 +69,9 @@ public class PostController {
     }
     //get all post
     @GetMapping("/all")
-    public List<ApiPostRes> getPostByApiRes(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize) {
-        Page<Post> posts = postService.findPaginated(pageNo, pageSize);
+    public List<ApiPostRes> getPostByApiRes(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize,
+                                            @RequestParam("field") String field, @RequestParam("dir") String dir) {
+        Page<Post> posts = postService.findPaginated(pageNo, pageSize, field, dir);
         return getApiPostRes(pageNo, pageSize, posts);
     }
     //get post by post id
@@ -83,8 +84,9 @@ public class PostController {
     }
     //get post by user with pagination
     @GetMapping("/user")
-    public List<ApiPostRes> getPostByUser(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, @RequestParam("userId") int userId) {
-        Page<Post> posts = postService.findPaginatedByUser(pageNo, pageSize, userId);
+    public List<ApiPostRes> getPostByUser(@RequestParam("pageNo") int pageNo, @RequestParam("pageSize") int pageSize, @RequestParam("userId") int userId,
+                                          @RequestParam("field") String field, @RequestParam("dir") String dir) {
+        Page<Post> posts = postService.findPaginatedByUser(pageNo, pageSize, userId, field, dir);
         return getApiPostRes(pageNo, pageSize, posts);
     }
 
