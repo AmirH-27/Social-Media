@@ -1,4 +1,4 @@
-# WSIT Social Media Task
+# Social Media
 
 ## Database Design
 
